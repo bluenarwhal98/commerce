@@ -1,0 +1,109 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2> {{ Item.name }} </h2>
+
+<div>
+  <img src="{{ Item.image_url }}" class="card-img-top" style="margin: auto;" alt="Item's image">
+</div>
+<div class="card">
+  <h4 class="card-header"> Current Bid (SGD): {{ Highest_Bid.bid_amount }} </h4>
+  <div class="card-body">
+    <h5 class="card-title"> <b> Starting Bid (SGD): </b> {{ Item.start_bid }} </h5>
+    <p class="card-text"> <b> Description: </b> {{ Item.description }} </p>
+    {% if user.is_authenticated %}
+      <div>
+      {% if Waka == False %}
+          <form action="{% url 'watchlist' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ Item.id }}" name="item_id">
+            <input type="submit" value="Put on Watchlist">
+          </form>
+      {% else %}
+          <form action="{% url 'remove_watchlist' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ Item.id }}" name="item_id">
+            <input type="submit" value="Remove from Watchlist">
+          </form>
+      {% endif %}
+      </div>
+      <div>
+      {% if user.username == Poster_Name and Item.active == True %}
+          <form action="{% url 'my_listing' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ Item.id }}" name="item_id">
+            <input type="submit" value="Close Listing">
+          </form>
+      {% elif user.username == Poster_Name and Item.active == False %}
+          <form action="{% url 'delete' Item.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ Item.id }}" name="item_id">
+            <input type="submit" value="Delete Listing">
+          </form>
+      {% endif %}
+      </div>
+  {% endif %}
+
+  </div>
+</div>
+
+{% if user.is_authenticated %}
+
+{% if Win == True and Item.active == False %}
+  <h4> You have won the bid! </h4>
+{% elif Win == False and Item.active == False %}
+  <h4> You did not win the bid. </h4>
+{% else %}
+  <h4> Place a Bid </h4>
+  <form action="{% url 'bid' %}" method="POST">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <div class="col-sm-7">
+        <input type="number" min="{{ Item.start_bid }}" name="bid" class="form-control" placeholder="Bid Amount" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <input type="hidden" name="item_id" value="{{ Item.id }}">
+      </div>
+      <div class="col-sim">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2"> Bid </button>
+      </div>
+    </div>
+  </form>
+{% endif %}
+
+<h4> Make Comment </h4>
+<form action="{% url 'comment' %}" method="POST">
+  {% csrf_token %}
+  <div class="mb-3">
+    <textarea class="form-control" name="comment" rows="3"></textarea>
+    <input type="hidden" name="item_id" value="{{ Item.id }}">
+    <button class="btn btn-outline-secondary" type="submit" id="button-addon2"> Submit </button>
+  </div>
+</form>
+
+{% else %}
+<div class="card">
+  <div class="card-body">
+    Sign in to bid or comment on this listing
+  </div>
+</div>
+{% endif %}
+
+<div>
+  <h4> Comment Section </h4>
+  <ul>
+    {% if Count < 1 %}
+      <h5> No comments! </h5>
+    {% else %}
+      {% for comment in Comments %}
+        <div class="card">
+          <h4 class="card-header"> {{ comment.commenter }} says.. </h4>
+          <div class="card-body">
+            <p class="card-text"> {{ comment.comment }} </p>
+          </div>
+        </div>
+
+      {% endfor %}
+    {% endif %}
+  
+ 
+
+{% endblock %}

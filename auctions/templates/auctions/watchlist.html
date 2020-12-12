@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Your Watchlist</h2>
+
+    <ul>
+    	{% for watchlist in Watchlist %}
+    	
+    		<div class="card mb-3">
+    			<div class="row g-0">
+    				<div class="col-md-4">
+  						<img src="{{ watchlist.item.image_url }}" class="card-img-top" alt="image">
+  					</div>
+  		
+  					<div class="col-md-8">
+  						<div class="card-body">
+  							<form action="{% url 'index' %}"  method="POST"> 
+  								{% csrf_token %}
+  								 <input type="text" readonly class="form-control-plaintext" name="name" id="name" value="{{watchlist.item.name }}" style="font-weight: bold; font-size: 25px;"> 
+    							<p class="card-text"> <b> Starting Bid (SGD): </b> {{ watchlist.item.start_bid }} </p>	
+    							<p class="card-text"> <b> Description: </b> {{ watchlist.item.description }} </p>
+                  {% if watchlist.item.active == False %}
+                  <p class="card-text"> <b> Status: </b> Closed </p>
+                  {% else %}
+                  <p class="card-text"> <b> Status: </b> Open </p>
+                  {% endif %}
+    							<input class="btn btn-primary" name="listing_page" type="submit" value="Check it out!">
+    						</form>
+  						</div>
+					</div>
+				</div>
+			</div>
+		
+    	{% endfor %}
+    </ul>
+{% endblock %}

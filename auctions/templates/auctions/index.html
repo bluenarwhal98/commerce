@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    <ul>
+    	{% for list in Listings %}
+    	
+    		<div class="card mb-3">
+    			<div class="row g-0">
+    				<div class="col-md-4">
+  						<img src="{{ list.image_url }}" class="card-img-top" alt="image">
+  					</div>
+  		
+  					<div class="col-md-8">
+  						<div class="card-body">
+  							<form action="{% url 'index' %}"  method="POST"> 
+  								{% csrf_token %}
+  								 <input type="text" readonly class="form-control-plaintext" name="name" id="name" value="{{list.name }}" style="font-weight: bold; font-size: 25px;"> 
+    							<p class="card-text"> <b> Starting Bid (SGD): </b> {{ list.start_bid }} </p>	
+    							<p class="card-text"> <b> Description: </b> {{ list.description }} </p>
+    							<input class="btn btn-primary" type="submit" value="Check it out!">
+    						</form>
+  						</div>
+					</div>
+				</div>
+			</div>
+		
+    	{% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>List your Item!</h2>
+
+    <form action="{% url 'list' %}" method="POST">
+		{% csrf_token %}
+		<p><label for="name"> Item Name: </label>
+			<input type="text" name="name" id="name" required> </p>
+		<p><label for="desp"> Description: </label>
+			<textarea name="desp" id="desp" required> </textarea></p>
+		<p><label for="category"> Category: </label>
+			<select name="category" class="form-select" aria-label="Default select example" required>
+  				<option value="F">Fashion</option>
+  				<option value="BW">Beauty and Wellness</option>
+  				<option value="FB">Food and Beverage</option>
+  				<option value="TechG">Technology and Gadgets</option>
+  				<option value="TGames">Toys and Games</option>
+  				<option value="Others">Others</option>
+			</select>
+		<p><label for="img"> Image URL: </label>
+			<input type="url" name="img" id="img"> </p>
+		<p><label for="bid"> Starting Bid (SGD) </label>
+			<input type="number" min="1" name="bid" id="bid" required> </p>
+
+		<div>
+			<input type="submit" value="Publish Listing">
+		</div>
+	</form>
+
+{% endblock %}

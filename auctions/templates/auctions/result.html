@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2> {{ Count }} results found: </h2>
+
+<ul>
+    {% for result in Result %}
+    	
+    	<div class="card mb-3" style="max-width: 540px;">
+    		<div class="row g-0">
+    			<div class="col-md-4">
+  					<img src="{{ result.image_url }}" class="card-img-top" alt="image">
+  				</div>
+  				<div class="col-md-8">
+  					<div class="card-body">
+    					<h5 class="card-title"> {{ result.name }} </h5>
+    					<p class="card-text"> {{ result.description }} </p>
+    					<p class="card-text"> Starting Bid (SGD): {{ result.start_bid }} </p>
+    					<a href="#" class="btn btn-primary"> Check it out! </a>
+  					</div>
+				</div>
+			</div>
+		</div>
+		
+    {% endfor %}
+</ul>
+{% endblock %}
